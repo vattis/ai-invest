@@ -1,0 +1,10 @@
+{
+  "type":"object", "additionalProperties":false,
+  "properties":{
+    "summary":{"type":"string"},
+    "orders":{"type":"array","items":{"type":"object","additionalProperties":false,
+      "properties":{"symbol":{"type":"string"},"action":{"type":"string","enum":["BUY","SELL","HOLD"]},"target_weight":{"type":"number","minimum":0,"maximum":1},"reason":{"type":"string"}},
+      "required":["symbol","action","target_weight","reason"]}},
+    "lessons":{"type":"array","items":{"type":"string"}}
+  },"required":["summary","orders","lessons"]
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1220">
+  <title>Orbit · AI 투자 실험실</title>
+  <link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script>
+</head>
+<body>
+  <div id="notice" class="toast" role="status" aria-live="polite" hidden></div>
+  <section id="auth" class="auth-shell">
+    <div class="auth-story"><a class="brand" href="/">◉ <span>ORBIT<span class="brand-sub">RESEARCH CONSOLE</span></span></a>
+      <p class="eyebrow">YOUR PRIVATE AI LAB</p><h1>판단을 기록하고,<br>변화를 관찰하세요.</h1><p class="muted">두 시장. 두 대조군.<br>AI의 선택과 사용량을 한곳에서 관리합니다.</p>
+      <div class="orbit-visual" aria-hidden="true"><div></div><span>A</span><span>B</span><b>40</b><small>관찰 대상 종목</small></div>
+      <p class="privacy-note">개인 모의투자 실험 · 실주문 연결 없음</p>
+    </div>
+    <div class="auth-card"><span class="tag">PRIVATE ACCESS</span><h2 id="auth-title">실험실 로그인</h2><p id="auth-description" class="muted">등록된 운영자 계정으로 접속하세요.</p>
+      <form id="login-form"><label>이메일<input name="email" type="email" autocomplete="username" required placeholder="you@example.com"></label><label>비밀번호<input name="password" type="password" autocomplete="current-password" required></label><button class="primary" type="submit">로그인 <span>→</span></button></form>
+      <form id="mfa-form" hidden><div id="enrollment" hidden><p>인증 앱에 아래 설정 키를 등록하세요. 시간 기반(TOTP), 6자리 코드입니다.</p><code id="totp-secret"></code><button id="copy-secret" type="button" class="subtle">설정 키 복사</button></div><label>인증 앱 코드<input name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required placeholder="000000"></label><button type="submit" class="primary">인증하고 접속</button><button type="button" id="back-login" class="subtle">다른 계정으로 로그인</button></form>
+      <p id="auth-error" class="error" role="alert"></p><p class="fine">로그인과 2단계 인증을 모두 완료해야<br>사용량 조회와 모델 설정을 사용할 수 있습니다.</p>
+      <a class="preview-link" href="/?preview=1">샘플 화면 둘러보기 ↗</a>
+    </div>
+  </section>
+  <div id="console" hidden>
+    <aside class="sidebar"><a class="brand" href="/">◉ <span>ORBIT<span class="brand-sub">RESEARCH CONSOLE</span></span></a><div class="nav-label">WORKSPACE</div><nav><a href="#overview" class="active">◫ <span>운영 현황</span></a><a href="#models">⚙ <span>모델 설정</span></a><a href="#usage">▥ <span>작업 기록</span></a></nav><div class="sidebar-footer"><span class="dot"></span> 개인 모의투자 실험<p>국내 20 · 미국 20</p></div></aside>
+    <main>
+      <header class="topbar"><span class="breadcrumb">실험실 <span>/</span> 운영 콘솔</span><div><span id="identity"></span><button id="logout" class="subtle">로그아웃</button></div></header>
+      <div id="preview-banner" class="banner" hidden>샘플 미리보기 · 아래 수치는 예시입니다. 실제 계정 연결과 설정 변경은 비활성화되어 있습니다.</div>
+      <section class="page-heading" id="overview"><div><p class="eyebrow">CONTROL CENTER</p><h1>오늘의 실험실</h1><p class="muted">실행 상태를 확인하고, 작업에 맞는 모델을 선택하세요.</p></div><button id="refresh" class="secondary">↻ 새로고침</button></section>
+      <div id="connection" class="connection"><span class="dot"></span><strong>PC 연결 확인 중</strong><span id="last-sync"></span></div>
+      <section class="panel"><div class="section-heading"><div><span class="eyebrow">PAPER ACCOUNTS</span><h2>A/B 가상 계좌</h2></div><span class="tag">실제 주문 없음</span></div><div id="accounts" class="account-grid"></div><h3>최근 가상 체결</h3><div class="table-scroll"><table><thead><tr><th>시각</th><th>시장·그룹</th><th>종목</th><th>매매</th><th>수량</th><th>체결가</th></tr></thead><tbody id="trades"></tbody></table></div></section>
+      <section class="metric-grid" aria-label="사용량 요약"><article class="metric"><span>봇 사용 토큰</span><strong id="total-tokens">—</strong><small id="usage-coverage">측정된 작업 기준</small></article><article class="metric"><span>실행 작업</span><strong id="job-count">—</strong><small>실패·시간 초과 포함</small></article><article class="metric"><span>입력 / 출력</span><strong class="small-metric" id="in-out">—</strong><small id="cache-tokens">캐시 입력은 입력에 포함</small></article><article class="metric quota-metric"><span>계정 전체 사용 한도</span><div id="quota">확인 불가</div><small id="quota-time">업무 등 다른 사용도 포함</small></article></section>
+      <section id="models" class="panel"><div class="section-heading"><div><span class="eyebrow">AGENT ROUTING</span><h2>작업별 모델 설정</h2></div><span class="tag">다음 실행부터 적용</span></div><p class="section-description">매매 판단은 A/B에 같은 모델과 설정 버전을 적용합니다. 실행 중인 작업은 기존 설정으로 완료됩니다.</p><div id="settings-list" class="settings-list"></div><p id="model-status" class="fine"></p></section>
+      <section id="usage" class="panel"><div class="section-heading"><div><span class="eyebrow">EXECUTION LOG</span><h2>작업과 토큰 기록</h2></div><label class="period-label">기간<select id="period"><option value="day">최근 24시간</option><option value="week">최근 7일</option><option value="month">최근 30일</option></select></label></div><div class="table-scroll"><table><thead><tr><th>실행 시각</th><th>작업</th><th>모델</th><th>상태</th><th>토큰</th><th>소요 시간</th></tr></thead><tbody id="runs"></tbody></table></div><p class="fine">최근 100개 작업을 표시합니다. 상단 사용량은 선택 기간 전체를 합산합니다. 미수집 사용량은 0으로 취급하지 않습니다.</p></section>
+      <section class="panel audit-panel"><div class="section-heading"><div><span class="eyebrow">CHANGE HISTORY</span><h2>설정 변경 이력</h2></div></div><div id="audit"></div></section>
+      <footer>ORBIT / PERSONAL RESEARCH <span>실험 결과는 투자 수익을 보장하지 않습니다.</span></footer>
+    </main>
+  </div>
+</body></html>

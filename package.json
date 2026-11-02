@@ -1,0 +1,20 @@
+{
+  "name": "trading-agent-control",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env.local scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "worker": "node --env-file-if-exists=.env.worker.local worker/main.mjs",
+    "market": "node --env-file-if-exists=.env.worker.local worker/market.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.14",
+    "@playwright/test": "^1.64.1"
+  }
+}
