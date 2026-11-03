@@ -8,14 +8,21 @@
   },
   "scripts": {
     "dev": "node --env-file-if-exists=.env.local scripts/dev.mjs",
+    "serve:local": "node --env-file-if-exists=.env.pc.local scripts/serve-local.mjs",
+    "start:local": "node scripts/run-local.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "worker:local": "node --env-file-if-exists=.env.pc.worker.local worker/main.mjs",
+    "market:local": "node --env-file-if-exists=.env.pc.worker.local worker/market.mjs",
     "build": "node scripts/build.mjs",
     "db:migrate": "node --env-file-if-exists=.runtime/production.env scripts/migrate.mjs",
     "test": "node --test tests/*.test.mjs",
     "worker": "node --env-file-if-exists=.env.worker.local worker/main.mjs",
     "market": "node --env-file-if-exists=.env.worker.local worker/market.mjs"
   },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.15"
+  },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.14",
     "@playwright/test": "^1.64.1",
     "pg": "^8.23.1"
   }

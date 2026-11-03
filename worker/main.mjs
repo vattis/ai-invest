@@ -61,7 +61,7 @@ async function heartbeat(){
       worker_id:workerId,updated_at:new Date().toISOString(),settings_versions:Object.fromEntries(settings.map(s=>[s.task_key,s.version])),
       models,models_at:modelsAt,rate_limits:limits,rate_limits_at:limitsAt,state:currentJob?'running':'idle',current_job:currentJob,error:lastError
     }});
-  }catch{console.error('클라우드 동기화 실패. 결과는 로컬 outbox에 보관됩니다.');}
+  }catch{console.error('제어 서버 동기화 실패. 결과는 로컬 outbox에 보관됩니다.');}
   finally{heartbeatBusy=false;}
 }
 const schema=fileURLToPath(new URL('./decision-schema.json',import.meta.url));
