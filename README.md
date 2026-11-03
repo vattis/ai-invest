@@ -31,17 +31,18 @@ npm run dev
 
 ## 2. Supabase 준비
 
-1. 개인 Supabase 프로젝트를 만들고 SQL Editor에서 `supabase/migrations/001_control_plane.sql`, `supabase/migrations/002_paper_accounts.sql`을 순서대로 한 번씩 실행합니다.
-2. Authentication에서 이메일/비밀번호 사용자 **본인 한 명**을 만들고 이메일 확인을 완료합니다. `Allow new users to sign up`은 끕니다. TOTP MFA는 활성 상태로 유지합니다.
-3. 사용자의 UUID를 확인한 뒤 SQL Editor에서 직접 아래 쿼리를 실행합니다. 웹 요청으로 소유자를 등록하는 경로는 없습니다.
+1. 개인 Supabase 프로젝트를 만들고 Vercel에 연결합니다. 연결 직후 Vercel Production 환경 변수 중 웹에 필요한 값은 `SUPABASE_URL`, `SUPABASE_ANON_KEY`뿐입니다. DB 접속 정보와 service-role 키는 PC의 Git 제외 파일에 보관하고 Vercel 웹 환경에서는 제거합니다.
+2. DB 접속 정보가 담긴 로컬 환경 파일을 준비한 뒤 `npm run db:migrate`를 실행합니다. 기본 경로는 `.runtime/production.env`이며, 마이그레이션 적용 이력은 DB의 `app_internal.schema_migrations`에 기록됩니다. `DB_SSL_CA_PATH`에 Supabase DB 인증서 경로를 지정하면 인증서를 검증합니다. 인증서가 없을 때는 TLS 연결을 요구합니다. SQL Editor에서 두 파일을 순서대로 실행해도 됩니다.
+3. Authentication에서 이메일/비밀번호 사용자 **본인 한 명**을 만들고 이메일 확인을 완료합니다. `Allow new users to sign up`은 끕니다. TOTP MFA는 활성 상태로 유지합니다.
+4. 사용자의 UUID를 확인한 뒤 SQL Editor에서 직접 아래 쿼리를 실행합니다. 웹 요청으로 소유자를 등록하는 경로는 없습니다.
 
 ```sql
 insert into public.app_owner(singleton,user_id)
 values(true,'YOUR_AUTH_USER_UUID');
 ```
 
-4. `.env.example`을 `.env.local`로 복사하고 Supabase URL, 공개 키, `OWNER_USER_ID`를 입력합니다. SQL의 UUID와 반드시 같아야 합니다.
-5. 로그인 후 인증 앱에 화면의 TOTP 설정 키를 등록하고 6자리 코드로 인증합니다. 서버와 RLS 모두 MFA가 없는 세션을 거부합니다.
+5. `.env.example`을 `.env.local`로 복사하고 Supabase URL, 공개 키, `OWNER_USER_ID`를 입력합니다. SQL의 UUID와 반드시 같아야 합니다.
+6. 로그인 후 인증 앱에 화면의 TOTP 설정 키를 등록하고 6자리 코드로 인증합니다. 서버와 RLS 모두 MFA가 없는 세션을 거부합니다.
 
 기기 분실 시 Supabase 대시보드에서 본인 사용자 MFA factor를 초기화한 뒤 재등록합니다. 이 구현은 **본인 계정 + MFA**이며 특정 휴대폰 한 대에만 하드웨어적으로 묶인 인증은 아닙니다. 세션은 로그아웃으로 종료할 수 있습니다. 비밀번호/계정 복구는 Supabase 관리 화면에서 처리합니다.
 
