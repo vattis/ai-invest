@@ -22,7 +22,7 @@ export function launch(args, env = process.env, cwd) {
   const c = command(env);
   // Secrets for the broker/database never enter the agent process environment.
   const childEnv = {...env};
-  for (const name of Object.keys(childEnv)) if (/SUPABASE|BROKER|KIS_|ALPACA|WORKER_SECRET|^(OPENAI_API_KEY|CODEX_API_KEY)$/.test(name)) delete childEnv[name];
+  for (const name of Object.keys(childEnv)) if (/SUPABASE|BROKER|KIS_|ALPACA|WORKER_SECRET|^LOCAL_(WORKER_TOKEN|CONTROL_URL)$|^(OPENAI_API_KEY|CODEX_API_KEY)$/.test(name)) delete childEnv[name];
   return spawn(c.bin,[...c.prefix,...args],{
     cwd,env:childEnv,windowsHide:true,shell:false,detached:process.platform!=='win32',stdio:['pipe','pipe','pipe']
   });

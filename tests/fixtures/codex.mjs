@@ -10,6 +10,7 @@ if(process.argv.includes('app-server')){
   });
 }else if(process.env.TEST_CODEX_MODE==='hang')setInterval(()=>{},1000);
 else{
+  if(process.env.LOCAL_WORKER_TOKEN || process.env.LOCAL_CONTROL_URL) process.exit(7);
   process.stdin.resume();process.stdin.on('end',()=>{
     const args=process.argv.slice(2);
     if(!args.includes('--ignore-user-config')||!args.includes('shell_tool'))process.exit(3);
